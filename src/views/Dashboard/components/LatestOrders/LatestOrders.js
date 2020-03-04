@@ -1,148 +1,95 @@
-import React, { useState } from 'react';
+import React from 'react';
 import clsx from 'clsx';
-import moment from 'moment';
-import PerfectScrollbar from 'react-perfect-scrollbar';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
-import {
-  Card,
-  CardActions,
-  CardHeader,
-  CardContent,
-  Button,
-  Divider,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Tooltip,
-  TableSortLabel
-} from '@material-ui/core';
-import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+import { Card, CardContent, Grid, Typography, Avatar } from '@material-ui/core';
 
-import mockData from './data';
-import { StatusBullet } from 'components';
+import Modal from 'react-modal';
 
 const useStyles = makeStyles(theme => ({
-  root: {},
+  root: {
+    height: '100%'
+  },
   content: {
-    padding: 0
+    alignItems: 'center',
+    display: 'flex'
   },
-  inner: {
-    minWidth: 800
+  title: {
+    fontWeight: 700
   },
-  statusContainer: {
+  avatar: {
+    backgroundColor: theme.palette.error.main,
+    height: 56,
+    width: 56
+  },
+  icon: {
+    height: 32,
+    width: 32
+  },
+  difference: {
+    marginTop: theme.spacing(2),
     display: 'flex',
     alignItems: 'center'
   },
-  status: {
-    marginRight: theme.spacing(1)
+  differenceIcon: {
+    color: theme.palette.error.dark
   },
-  actions: {
-    justifyContent: 'flex-end'
+  differenceValue: {
+    color: theme.palette.error.dark,
+    marginRight: theme.spacing(1)
   }
 }));
 
-const statusColors = {
-  delivered: 'success',
-  pending: 'info',
-  refunded: 'danger'
+const customStyles = {
+  content : {
+    top                   : '50%',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    marginRight           : '-50%',
+    transform             : 'translate(-50%, -50%)'
+  }
 };
 
-const LatestOrders = props => {
-  const { className, ...rest } = props;
+function App(){
+  var subtitle;
+  const [modalIsOpen,setIsOpen] = React.useState(false);
+  function openModal() {
+    setIsOpen(true);
+  }
+ 
+  function afterOpenModal() {
+    // references are now sync'd and can be accessed.
+    //subtitle.style.color = '#f00';
+  }
+ 
+  function closeModal(){
+    setIsOpen(false);
+  }
 
-  const classes = useStyles();
-
-  const [orders] = useState(mockData);
-
-  return (
-    <Card
-      {...rest}
-      className={clsx(classes.root, className)}
-    >
-      <CardHeader
-        action={
-          <Button
-            color="primary"
-            size="small"
-            variant="outlined"
-          >
-            New entry
-          </Button>
-        }
-        title="Latest Orders"
-      />
-      <Divider />
-      <CardContent className={classes.content}>
-        <PerfectScrollbar>
-          <div className={classes.inner}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Order Ref</TableCell>
-                  <TableCell>Customer</TableCell>
-                  <TableCell sortDirection="desc">
-                    <Tooltip
-                      enterDelay={300}
-                      title="Sort"
-                    >
-                      <TableSortLabel
-                        active
-                        direction="desc"
-                      >
-                        Date
-                      </TableSortLabel>
-                    </Tooltip>
-                  </TableCell>
-                  <TableCell>Status</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {orders.map(order => (
-                  <TableRow
-                    hover
-                    key={order.id}
-                  >
-                    <TableCell>{order.ref}</TableCell>
-                    <TableCell>{order.customer.name}</TableCell>
-                    <TableCell>
-                      {moment(order.createdAt).format('DD/MM/YYYY')}
-                    </TableCell>
-                    <TableCell>
-                      <div className={classes.statusContainer}>
-                        <StatusBullet
-                          className={classes.status}
-                          color={statusColors[order.status]}
-                          size="sm"
-                        />
-                        {order.status}
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-        </PerfectScrollbar>
-      </CardContent>
-      <Divider />
-      <CardActions className={classes.actions}>
-        <Button
-          color="primary"
-          size="small"
-          variant="text"
+  //const classes = useStyles();
+  
+    return (
+    <Card>
+      <CardContent>
+        <img className='thumbNail' src="https://source.unsplash.com/random/1824" onClick={openModal}/>
+        <Modal
+          isOpen={modalIsOpen}
+          onAfterOpen={afterOpenModal}
+          onRequestClose={closeModal}
+          style={customStyles}
+          contentLabel="Example Modal"
         >
-          View all <ArrowRightIcon />
-        </Button>
-      </CardActions>
+          <img src="https://source.unsplash.com/random/1824"></img>
+        </Modal>
+      </CardContent>
     </Card>
-  );
-};
+    );
+ 
+}
 
-LatestOrders.propTypes = {
+App.propTypes = {
   className: PropTypes.string
 };
 
-export default LatestOrders;
+export default App;

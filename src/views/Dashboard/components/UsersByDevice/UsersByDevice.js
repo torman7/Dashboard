@@ -1,154 +1,95 @@
 import React from 'react';
-import { Doughnut } from 'react-chartjs-2';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { makeStyles, useTheme } from '@material-ui/styles';
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  IconButton,
-  Divider,
-  Typography
-} from '@material-ui/core';
-import LaptopMacIcon from '@material-ui/icons/LaptopMac';
-import PhoneIphoneIcon from '@material-ui/icons/PhoneIphone';
-import RefreshIcon from '@material-ui/icons/Refresh';
-import TabletMacIcon from '@material-ui/icons/TabletMac';
+import { makeStyles } from '@material-ui/styles';
+import { Card, CardContent, Grid, Typography, Avatar } from '@material-ui/core';
+
+import Modal from 'react-modal';
 
 const useStyles = makeStyles(theme => ({
   root: {
     height: '100%'
   },
-  chartContainer: {
-    position: 'relative',
-    height: '300px'
+  content: {
+    alignItems: 'center',
+    display: 'flex'
   },
-  stats: {
+  title: {
+    fontWeight: 700
+  },
+  avatar: {
+    backgroundColor: theme.palette.error.main,
+    height: 56,
+    width: 56
+  },
+  icon: {
+    height: 32,
+    width: 32
+  },
+  difference: {
     marginTop: theme.spacing(2),
     display: 'flex',
-    justifyContent: 'center'
+    alignItems: 'center'
   },
-  device: {
-    textAlign: 'center',
-    padding: theme.spacing(1)
+  differenceIcon: {
+    color: theme.palette.error.dark
   },
-  deviceIcon: {
-    color: theme.palette.icon
+  differenceValue: {
+    color: theme.palette.error.dark,
+    marginRight: theme.spacing(1)
   }
 }));
 
-const UsersByDevice = props => {
-  const { className, ...rest } = props;
-
-  const classes = useStyles();
-  const theme = useTheme();
-
-  const data = {
-    datasets: [
-      {
-        data: [63, 15, 22],
-        backgroundColor: [
-          theme.palette.primary.main,
-          theme.palette.error.main,
-          theme.palette.warning.main
-        ],
-        borderWidth: 8,
-        borderColor: theme.palette.white,
-        hoverBorderColor: theme.palette.white
-      }
-    ],
-    labels: ['Desktop', 'Tablet', 'Mobile']
-  };
-
-  const options = {
-    legend: {
-      display: false
-    },
-    responsive: true,
-    maintainAspectRatio: false,
-    animation: false,
-    cutoutPercentage: 80,
-    layout: { padding: 0 },
-    tooltips: {
-      enabled: true,
-      mode: 'index',
-      intersect: false,
-      borderWidth: 1,
-      borderColor: theme.palette.divider,
-      backgroundColor: theme.palette.white,
-      titleFontColor: theme.palette.text.primary,
-      bodyFontColor: theme.palette.text.secondary,
-      footerFontColor: theme.palette.text.secondary
-    }
-  };
-
-  const devices = [
-    {
-      title: 'Desktop',
-      value: '63',
-      icon: <LaptopMacIcon />,
-      color: theme.palette.primary.main
-    },
-    {
-      title: 'Tablet',
-      value: '15',
-      icon: <TabletMacIcon />,
-      color: theme.palette.error.main
-    },
-    {
-      title: 'Mobile',
-      value: '23',
-      icon: <PhoneIphoneIcon />,
-      color: theme.palette.warning.main
-    }
-  ];
-
-  return (
-    <Card
-      {...rest}
-      className={clsx(classes.root, className)}
-    >
-      <CardHeader
-        action={
-          <IconButton size="small">
-            <RefreshIcon />
-          </IconButton>
-        }
-        title="Users By Device"
-      />
-      <Divider />
-      <CardContent>
-        <div className={classes.chartContainer}>
-          <Doughnut
-            data={data}
-            options={options}
-          />
-        </div>
-        <div className={classes.stats}>
-          {devices.map(device => (
-            <div
-              className={classes.device}
-              key={device.title}
-            >
-              <span className={classes.deviceIcon}>{device.icon}</span>
-              <Typography variant="body1">{device.title}</Typography>
-              <Typography
-                style={{ color: device.color }}
-                variant="h2"
-              >
-                {device.value}%
-              </Typography>
-            </div>
-          ))}
-        </div>
-      </CardContent>
-    </Card>
-  );
+const customStyles = {
+  content : {
+    top                   : '50%',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    marginRight           : '-50%',
+    transform             : 'translate(-50%, -50%)'
+  }
 };
 
-UsersByDevice.propTypes = {
+function App(){
+  var subtitle;
+  const [modalIsOpen,setIsOpen] = React.useState(false);
+  function openModal() {
+    setIsOpen(true);
+  }
+ 
+  function afterOpenModal() {
+    // references are now sync'd and can be accessed.
+    //subtitle.style.color = '#f00';
+  }
+ 
+  function closeModal(){
+    setIsOpen(false);
+  }
+
+  //const classes = useStyles();
+  
+    return (
+    <Card>
+      <CardContent>
+        <img className='thumbNail' src="https://source.unsplash.com/random/3434" onClick={openModal}/>
+        <Modal
+          isOpen={modalIsOpen}
+          onAfterOpen={afterOpenModal}
+          onRequestClose={closeModal}
+          style={customStyles}
+          contentLabel="Example Modal"
+        >
+          <img src="https://source.unsplash.com/random/3434"></img>
+        </Modal>
+      </CardContent>
+    </Card>
+    );
+ 
+}
+
+App.propTypes = {
   className: PropTypes.string
 };
 
-export default UsersByDevice;
+export default App;

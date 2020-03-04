@@ -4,13 +4,13 @@ import { Grid } from '@material-ui/core';
 
 import {
   Budget,
+  Budget2,
   TotalUsers,
   TasksProgress,
   TotalProfit,
   LatestSales,
   UsersByDevice,
   LatestProducts,
-  LatestOrders
 } from './components';
 
 const useStyles = makeStyles(theme => ({
@@ -28,77 +28,70 @@ const Dashboard = () => {
         container
         spacing={4}
       >
-        <Grid
+      <Grid
+        item
+        lg={3}
+        md={6}
+        xl={3}
+        xs={12}
+      >
+        <LatestProducts />
+      </Grid>      
+      <Grid
+        item
+        lg={3}
+        sm={6}
+        xl={3}
+        xs={12}
+      >
+        <TotalUsers />
+      </Grid>
+      <Grid
+        item
+        lg={3}
+        sm={6}
+        xl={3}
+        xs={12}
+      >
+        <TasksProgress />
+      </Grid>
+      <Grid
+        item
+        lg={3}
+        sm={6}
+        xl={3}
+        xs={12}
+      >
+        <TotalProfit />
+      </Grid>
+
+      <Grid
           item
           lg={3}
-          sm={6}
+          md={6}
           xl={3}
           xs={12}
         >
           <Budget />
         </Grid>
+
         <Grid
           item
           lg={3}
-          sm={6}
+          md={6}
           xl={3}
-          xs={12}
-        >
-          <TotalUsers />
-        </Grid>
-        <Grid
-          item
-          lg={3}
-          sm={6}
-          xl={3}
-          xs={12}
-        >
-          <TasksProgress />
-        </Grid>
-        <Grid
-          item
-          lg={3}
-          sm={6}
-          xl={3}
-          xs={12}
-        >
-          <TotalProfit />
-        </Grid>
-        <Grid
-          item
-          lg={8}
-          md={12}
-          xl={9}
           xs={12}
         >
           <LatestSales />
         </Grid>
         <Grid
           item
-          lg={4}
+          lg={3}
           md={6}
           xl={3}
           xs={12}
         >
           <UsersByDevice />
-        </Grid>
-        <Grid
-          item
-          lg={4}
-          md={6}
-          xl={3}
-          xs={12}
-        >
-          <LatestProducts />
-        </Grid>
-        <Grid
-          item
-          lg={8}
-          md={12}
-          xl={9}
-          xs={12}
-        >
-          <LatestOrders />
         </Grid>
       </Grid>
     </div>

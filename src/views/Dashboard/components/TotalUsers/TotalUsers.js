@@ -1,10 +1,8 @@
-import React from 'react';
+import React, { Component } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
-import { Card, CardContent, Grid, Typography, Avatar } from '@material-ui/core';
-import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
-import PeopleIcon from '@material-ui/icons/PeopleOutlined';
+import { Card, CardContent, Grid, Typography, } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -40,60 +38,83 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const TotalUsers = props => {
-  const { className, ...rest } = props;
+const PATH_BASE = 'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&interval=5min&apikey=BCZCINIU9L5XYA3K';
+const PATH_SYM = '&symbol=AAPL';
 
-  const classes = useStyles();
+const url = `${PATH_BASE}${PATH_SYM}`;
 
-  return (
-    <Card
-      {...rest}
-      className={clsx(classes.root, className)}
-    >
-      <CardContent>
-        <Grid
-          container
-          justify="space-between"
-        >
-          <Grid item>
-            <Typography
-              className={classes.title}
-              color="textSecondary"
-              gutterBottom
-              variant="body2"
-            >
-              TOTAL USERS
-            </Typography>
-            <Typography variant="h3">1,600</Typography>
+class App extends Component {  
+
+  constructor(props)
+  {
+    super(props);
+
+    // state variables
+    this.state = {
+      results: null,
+    }
+
+    //this.setWeather = this.setWeather.bind(this);
+  }
+
+  setWeather(results)
+  {
+    this.setState({results});
+  }
+
+  componentDidMount() {
+    // set up searchTerm = to whatever is in the searchTerm state variable
+    //const {searchTerm} = this.state;
+
+    // fetch information from the parameter in the (), checks to see if it is JSON
+    // if so, the data that comes back is in result, pass that to our setSearchTopStories
+    // function where it sets up our state variable for result
+    // if there is an error, save it in error
+    fetch(`${url}`)
+      .then(response => response.json())
+      .then(result => this.setWeather(result))
+      .catch(error => error);
+  }
+
+  render(){
+    const { results } = this.state;
+
+    return (
+      <Card>
+        <CardContent>
+          <Grid>
+            <Grid item>
+              <Typography
+                
+                color="textSecondary"
+                gutterBottom
+                variant="body2"
+              >
+                Stocks - APPLE
+              </Typography>
+              
+              { results ?
+                <Typography>
+                  <h2>
+                    {results["Global Quote"]["01. symbol"]}
+                  </h2>
+                  <h3>
+                    ${results["Global Quote"]["05. price"]}
+                  </h3>
+                </Typography>
+                : null
+              }
+            
+            </Grid>
           </Grid>
-          <Grid item>
-            <Avatar className={classes.avatar}>
-              <PeopleIcon className={classes.icon} />
-            </Avatar>
-          </Grid>
-        </Grid>
-        <div className={classes.difference}>
-          <ArrowUpwardIcon className={classes.differenceIcon} />
-          <Typography
-            className={classes.differenceValue}
-            variant="body2"
-          >
-            16%
-          </Typography>
-          <Typography
-            className={classes.caption}
-            variant="caption"
-          >
-            Since last month
-          </Typography>
-        </div>
-      </CardContent>
-    </Card>
-  );
+        </CardContent>
+      </Card>
+    );
+  }
 };
 
-TotalUsers.propTypes = {
+App.propTypes = {
   className: PropTypes.string
 };
 
-export default TotalUsers;
+export default App;

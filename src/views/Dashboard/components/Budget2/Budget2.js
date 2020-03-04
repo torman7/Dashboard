@@ -72,7 +72,7 @@ function App(){
     return (
     <Card>
       <CardContent>
-        <img className='thumbNail' src="https://source.unsplash.com/random/333" onClick={openModal}/>
+        <img className='thumbNail' src="https://source.unsplash.com/random/222" onClick={openModal}/>
         <Modal
           isOpen={modalIsOpen}
           onAfterOpen={afterOpenModal}
@@ -80,7 +80,7 @@ function App(){
           style={customStyles}
           contentLabel="Example Modal"
         >
-          <img src="https://source.unsplash.com/random/333"></img>
+          <img src="https://source.unsplash.com/random/222"></img>
         </Modal>
       </CardContent>
     </Card>

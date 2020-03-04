@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Component } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
@@ -9,11 +9,7 @@ import {
   CardActions,
   Button,
   Divider,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
-  IconButton
+  Typography
 } from '@material-ui/core';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
@@ -36,67 +32,76 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const LatestProducts = props => {
-  const { className, ...rest } = props;
+const PATH_BASE = 'http://api.openweathermap.org/data/2.5/weather?&units=imperial&appid=48ab4b211f3c108306abd71a984bd231';
+const PATH_ZIP = '&zip=25703';
 
-  const classes = useStyles();
+const url = `${PATH_BASE}${PATH_ZIP}`;
 
-  const [products] = useState(mockData);
+class App extends Component {
 
-  return (
-    <Card
-      {...rest}
-      className={clsx(classes.root, className)}
-    >
-      <CardHeader
-        subtitle={`${products.length} in total`}
-        title="Latest products"
-      />
-      <Divider />
-      <CardContent className={classes.content}>
-        <List>
-          {products.map((product, i) => (
-            <ListItem
-              divider={i < products.length - 1}
-              key={product.id}
-            >
-              <ListItemAvatar>
-                <img
-                  alt="Product"
-                  className={classes.image}
-                  src={product.imageUrl}
-                />
-              </ListItemAvatar>
-              <ListItemText
-                primary={product.name}
-                secondary={`Updated ${product.updatedAt.fromNow()}`}
-              />
-              <IconButton
-                edge="end"
-                size="small"
-              >
-                <MoreVertIcon />
-              </IconButton>
-            </ListItem>
-          ))}
-        </List>
-      </CardContent>
-      <Divider />
-      <CardActions className={classes.actions}>
-        <Button
-          color="primary"
-          size="small"
-          variant="text"
-        >
-          View all <ArrowRightIcon />
-        </Button>
-      </CardActions>
-    </Card>
-  );
+  constructor(props)
+  {
+    super(props);
+
+    // state variables
+    this.state = {
+      results: null,
+    }
+
+    //this.setWeather = this.setWeather.bind(this);
+  }
+
+  setWeather(results)
+  {
+    this.setState({results});
+  }
+
+  componentDidMount() {
+    // set up searchTerm = to whatever is in the searchTerm state variable
+    //const {searchTerm} = this.state;
+
+    // fetch information from the parameter in the (), checks to see if it is JSON
+    // if so, the data that comes back is in result, pass that to our setSearchTopStories
+    // function where it sets up our state variable for result
+    // if there is an error, save it in error
+    fetch(`${url}`)
+      .then(response => response.json())
+      .then(result => this.setWeather(result))
+      .catch(error => error);
+  }
+  render()
+  {
+    const { results } = this.state;
+
+    return (
+      <Card>
+        <CardHeader
+          title="Local Weather"
+        />
+        <Divider />
+        <CardContent>
+          { results ?
+          <Typography>
+            <h1>
+              {results.name}
+            </h1>
+            <h2>
+              {results.main.temp} <sup>o</sup>F
+            </h2>
+            <h3>
+              {results.weather[0].main}
+            </h3>
+          </Typography>
+          : null
+          }
+        </CardContent>
+      </Card>
+    );
+  }
 };
 
-LatestProducts.propTypes = {
+App.propTypes = {
   className: PropTypes.string
 };
 
-export default LatestProducts;
+export default App;

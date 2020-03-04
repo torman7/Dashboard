@@ -3,8 +3,8 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import { Card, CardContent, Grid, Typography, Avatar } from '@material-ui/core';
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
-import MoneyIcon from '@material-ui/icons/Money';
+
+import Modal from 'react-modal';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -40,60 +40,56 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Budget = props => {
-  const { className, ...rest } = props;
-
-  const classes = useStyles();
-
-  return (
-    <Card
-      {...rest}
-      className={clsx(classes.root, className)}
-    >
-      <CardContent>
-        <Grid
-          container
-          justify="space-between"
-        >
-          <Grid item>
-            <Typography
-              className={classes.title}
-              color="textSecondary"
-              gutterBottom
-              variant="body2"
-            >
-              BUDGET
-            </Typography>
-            <Typography variant="h3">$24,000</Typography>
-          </Grid>
-          <Grid item>
-            <Avatar className={classes.avatar}>
-              <MoneyIcon className={classes.icon} />
-            </Avatar>
-          </Grid>
-        </Grid>
-        <div className={classes.difference}>
-          <ArrowDownwardIcon className={classes.differenceIcon} />
-          <Typography
-            className={classes.differenceValue}
-            variant="body2"
-          >
-            12%
-          </Typography>
-          <Typography
-            className={classes.caption}
-            variant="caption"
-          >
-            Since last month
-          </Typography>
-        </div>
-      </CardContent>
-    </Card>
-  );
+const customStyles = {
+  content : {
+    top                   : '50%',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    marginRight           : '-50%',
+    transform             : 'translate(-50%, -50%)'
+  }
 };
 
-Budget.propTypes = {
+function App(){
+  var subtitle;
+  const [modalIsOpen,setIsOpen] = React.useState(false);
+  function openModal() {
+    setIsOpen(true);
+  }
+ 
+  function afterOpenModal() {
+    // references are now sync'd and can be accessed.
+    //subtitle.style.color = '#f00';
+  }
+ 
+  function closeModal(){
+    setIsOpen(false);
+  }
+
+  //const classes = useStyles();
+  
+    return (
+    <Card>
+      <CardContent>
+        <img className='thumbNail' src="https://source.unsplash.com/random" onClick={openModal}/>
+        <Modal
+          isOpen={modalIsOpen}
+          onAfterOpen={afterOpenModal}
+          onRequestClose={closeModal}
+          style={customStyles}
+          contentLabel="Example Modal"
+        >
+          <img src="https://source.unsplash.com/random"></img>
+        </Modal>
+      </CardContent>
+    </Card>
+    );
+ 
+}
+
+App.propTypes = {
   className: PropTypes.string
 };
 
-export default Budget;
+export default App;
